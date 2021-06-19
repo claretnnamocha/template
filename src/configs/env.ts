@@ -11,8 +11,6 @@ const schema = Joi.object({
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRATION_TIME: Joi.string().required(),
   DB_URL: Joi.string().required().description("Database connection URL"),
-  PAYSTACK_SECRET_KEY: Joi.string().required(),
-  FLUTTERWAVE_HASH: Joi.string().required(),
 })
   .unknown()
   .required();

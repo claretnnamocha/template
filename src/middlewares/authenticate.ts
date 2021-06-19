@@ -2,8 +2,8 @@ import { NextFunction, Response } from "express";
 import JWT from "jsonwebtoken";
 import { env } from "../configs";
 import { response, types } from "../helpers";
-import { OrganisationMemberSchema } from "../helpers/types/schemas";
-import { OrganisationMember } from "../schemas";
+import { UserSchema } from "../helpers/types/schemas";
+import { User } from "../schemas";
 
 export default async (
   req: types.interfaces.request.others.CustomRequest,
@@ -24,7 +24,7 @@ export default async (
     if (!userId)
       return response(res, { status: false, message: "Unauthorized" }, 401);
 
-    const user: OrganisationMemberSchema = await OrganisationMember.findOne({
+    const user: UserSchema = await User.findOne({
       where: { id: userId, isDeleted: false, active: true },
     });
 
