@@ -5,8 +5,8 @@ const swagger: Options = {
   swaggerDefinition: {
     info: {
       version: "1.0.0",
-      description: "AfriMart ecommerce backend",
-      title: "AfriMart Backend API",
+      description: "Template backend",
+      title: "Template Backend API",
       contact: { name: "Claret Nnamocha", email: "devclareo@gmail.com" },
       servers: [{ url: `http://localhost:${port}` }],
     },
@@ -17,4 +17,3 @@ const swagger: Options = {
 const config = swaggerJsDoc(swagger);
 
 export { config };
-
