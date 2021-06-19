@@ -1,0 +1,284 @@
+import bcrypt from "bcryptjs";
+import { Op } from "sequelize";
+import { v4 as uuid } from "uuid";
+import { jwt, mail, others } from "../helpers";
+import { service } from "../helpers/types/interfaces";
+import { auth } from "../helpers/types/interfaces/request";
+import { TokenSchema, UserSchema } from "../helpers/types/schemas";
+import { Token, User } from "../schemas";
+
+/**
+ * Creates user account
+ * @param {auth.SignUpRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const signUp = async (
+  params: auth.SignUpRequest
+): Promise<service.Response> => {
+  try {
+    const { email } = params;
+
+    const duplicate = await User.findOne({
+      where: { isDeleted: false, email },
+    });
+
+    if (duplicate) {
+      return {
+        status: false,
+        message: `This email has been used to open an account on this platform`,
+      };
+    }
+    const id = uuid();
+    await User.create({
+      id,
+      ...params,
+    });
+
+    const token = await others.generateToken(id);
+
+    await mail.send(
+      email,
+      "Registration Complete",
+      `Registration successful your token is ${token}`,
+      `<b>Registration successful</b><p>your token is ${token}`
+    );
+
+    return { status: true, message: "Registration Successful" };
+  } catch (error) {
+    return {
+      status: false,
+      message: "Error trying to create account",
+    };
+  }
+};
+
+/**
+ * Login
+ * @param {auth.SignInRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const signIn = async (
+  params: auth.SignInRequest
+): Promise<service.Response> => {
+  try {
+    const { user, password } = params;
+
+    const _user: UserSchema = await User.findOne({
+      where: { [Op.or]: [{ phone: user }, { email: user }] },
+    });
+
+    if (!_user || !bcrypt.compareSync(password, _user.password)) {
+      return { status: false, message: "Invalid username or password" };
+    }
+
+    if (!_user.active) {
+      return { status: false, message: "Account is banned contact admin" };
+    }
+
+    if (!_user.verifiedemail) {
+      const token = await others.generateToken(_user.id);
+      await mail.send(
+        _user.email,
+        "Verify Email",
+        `Verify email: ${token}`,
+        `Verify email: ${token}`
+      );
+      return { status: false, message: "Please verify your email" };
+    }
+
+    const data = _user.transform();
+    data.token = jwt.generate(_user.id);
+
+    return { status: true, message: "Login successful", data };
+  } catch (error) {
+    return { status: false, message: "Error trying to login" };
+  }
+};
+
+/**
+ * Verify user account
+ * @param {auth.VerifyRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const verifyAccount = async (
+  params: auth.VerifyRequest
+): Promise<service.Response> => {
+  try {
+    const { token } = params;
+
+    const _token: TokenSchema = await Token.findOne({
+      where: { token, tokenType: "verify", active: true },
+    });
+
+    if (!_token) {
+      return { status: false, message: "Invalid token" };
+    }
+
+    await _token.update({ active: false });
+
+    if (parseInt(_token.expires) < Date.now()) {
+      return { status: false, message: "Token expired" };
+    }
+
+    const user: UserSchema = await User.findByPk(_token.UserId);
+
+    if (!user) {
+      return { status: false, message: "An error occured" };
+    }
+
+    await user.update({ verifiedemail: true });
+
+    return { status: true, message: "Account verified" };
+  } catch (error) {
+    return { status: false, message: "Error trying to login" };
+  }
+};
+
+/**
+ * Resend Verification code for user account
+ * @param {auth.ResendVerifyRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const resendVerificationAccount = async (
+  params: auth.ResendVerifyRequest
+): Promise<service.Response> => {
+  try {
+    const { email } = params;
+
+    const user: UserSchema = await User.findOne({
+      where: { email, active: true },
+    });
+
+    if (!user) {
+      return { status: false, message: "Invalid user" };
+    }
+
+    if (user.verifiedemail) {
+      return { status: false, message: "You are already verified" };
+    }
+
+    const token = await others.generateToken(user.id);
+    await mail.send(
+      user.email,
+      "Verify Email",
+      `Verify email: ${token}`,
+      `Verify email: ${token}`
+    );
+    return { status: true, message: "Verification token resent" };
+  } catch (error) {
+    return { status: false, message: "Error trying to login" };
+  }
+};
+
+/**
+ * Reset user account password
+ * @param {auth.InitiateResetRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const initiateReset = async (
+  params: auth.InitiateResetRequest
+): Promise<service.Response> => {
+  try {
+    const { email } = params;
+
+    const user: UserSchema = await User.findOne({
+      where: { email, isDeleted: false },
+    });
+    if (!user) {
+      return { status: true, message: "Check your email" };
+    }
+
+    const token = await others.generateToken(user.id, "reset");
+
+    await mail.send(
+      user.email,
+      "Reset Password",
+      `Reset Password with ${token}`,
+      `Reset Password with ${token}`
+    );
+
+    return { status: true, message: "Check your email" };
+  } catch (error) {
+    return { status: false, message: "Error trying to login" };
+  }
+};
+
+/**
+ * Verify user reset token
+ * @param {auth.VerifyRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const verifyReset = async (
+  params: auth.VerifyRequest
+): Promise<service.Response> => {
+  try {
+    const { token } = params;
+
+    const _token: TokenSchema = await Token.findOne({
+      where: { token, tokenType: "reset", active: true },
+    });
+
+    if (!_token) {
+      return { status: false, message: "Invalid token" };
+    }
+
+    await _token.update({ active: false });
+
+    if (parseInt(_token.expires) < Date.now()) {
+      return { status: false, message: "Token expired" };
+    }
+
+    const user: UserSchema = await User.findByPk(_token.UserId);
+
+    if (!user) {
+      return { status: false, message: "An error occured" };
+    }
+
+    const data = await others.generateToken(user.id, "update");
+
+    return { status: true, message: "Valid token", data };
+  } catch (error) {
+    return { status: false, message: "Error trying to login" };
+  }
+};
+
+/**
+ * Reset user password
+ * @param {auth.ResetPasswordRequest} params  Request Body
+ * @returns {service.Response} Contains status, message and data if any of the operation
+ */
+export const resetPassword = async (
+  params: auth.ResetPasswordRequest
+): Promise<service.Response> => {
+  try {
+    const { token, password } = params;
+
+    const _token: TokenSchema = await Token.findOne({
+      where: { token, tokenType: "update", active: true },
+    });
+
+    if (!_token) {
+      return { status: false, message: "Invalid token" };
+    }
+
+    await _token.update({ active: false });
+
+    if (parseInt(_token.expires) < Date.now()) {
+      return { status: false, message: "Token expired" };
+    }
+
+    const user: UserSchema = await User.findByPk(_token.UserId);
+
+    if (!user) {
+      return { status: false, message: "An error occured" };
+    }
+    await user.update({ password });
+
+    return { status: true, message: "Password updated" };
+  } catch (error) {
+    return {
+      status: false,
+      message: "Error trying to reset password",
+    };
+  }
+};
