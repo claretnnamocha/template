@@ -6,6 +6,7 @@ export default async (
   url: string,
   method: string = "post",
   body = null,
+  _headers = {},
   path: string = null
 ) => {
   body = method.toLowerCase() === "get" ? null : JSON.stringify(body);
@@ -24,7 +25,7 @@ export default async (
 
       response = await fetch(url, { method, body });
     } else {
-      const headers = { "Content-Type": "application/json" };
+      const headers = { "Content-Type": "application/json", ..._headers };
       response = await fetch(url, { method, body, headers });
     }
 

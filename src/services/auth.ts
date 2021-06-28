@@ -36,7 +36,7 @@ export const signUp = async (
 
     const token = await others.generateToken(id);
 
-    await mail.send(
+    await mail.sendgrid.send(
       email,
       "Registration Complete",
       `Registration successful your token is ${token}`,
@@ -77,7 +77,7 @@ export const signIn = async (
 
     if (!_user.verifiedemail) {
       const token = await others.generateToken(_user.id);
-      await mail.send(
+      await mail.sendgrid.send(
         _user.email,
         "Verify Email",
         `Verify email: ${token}`,
@@ -158,7 +158,7 @@ export const resendVerificationAccount = async (
     }
 
     const token = await others.generateToken(user.id);
-    await mail.send(
+    await mail.sendgrid.send(
       user.email,
       "Verify Email",
       `Verify email: ${token}`,
@@ -190,7 +190,7 @@ export const initiateReset = async (
 
     const token = await others.generateToken(user.id, "reset");
 
-    await mail.send(
+    await mail.sendgrid.send(
       user.email,
       "Reset Password",
       `Reset Password with ${token}`,

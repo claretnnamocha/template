@@ -11,7 +11,7 @@ const swagger: Options = {
       servers: [{ url: `http://localhost:${port}` }],
     },
   },
-  apis: ["./src/docs.yml"],
+  apis: ["./src/docs/*.yml"],
 };
 
 const config = swaggerJsDoc(swagger);

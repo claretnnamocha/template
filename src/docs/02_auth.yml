@@ -1,18 +1,4 @@
 paths:
-  dataset:
-    get:
-      summary: Example datasets
-      description: "
-
-        **User**
-
-        username: alpha
-
-        password: Alpha123
-        "
-      tags:
-        - Data
-
   /auth/sign-in:
     post:
       tags:
@@ -122,61 +108,6 @@ paths:
         200:
           description: Status and message and data
 
-  /user:
-    get:
-      tags:
-        - User
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: authorization
-          required: true
-          type: string
-      responses:
-        200:
-          description: Status and message and data
-
-  /user/change-password:
-    put:
-      tags:
-        - User
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: authorization
-          required: true
-          type: string
-        - in: body
-          name: request
-          required: true
-          schema:
-            $ref: "#/definitions/changePassword"
-      responses:
-        200:
-          description: Status and message and data
-
-  /user/edit-profile:
-    put:
-      tags:
-        - User
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: authorization
-          required: true
-          type: string
-        - in: body
-          name: request
-          required: true
-          schema:
-            $ref: "#/definitions/editProfile"
-      responses:
-        200:
-          description: Status and message and data
-
 definitions:
   signIn:
     type: object
@@ -227,29 +158,4 @@ definitions:
         type: string
         required: true
       password:
-        type: string
-  changePassword:
-    type: object
-    properties:
-      password:
-        type: string
-        required: true
-      oldPassword:
-        type: string
-        required: true
-  editProfile:
-    properties:
-      firstname:
-        type: string
-      lastname:
-        type: string
-      username:
-        type: string
-      dob:
-        type: string
-      country:
-        type: string
-      preferredLanguage:
-        type: string
-      currency:
         type: string
