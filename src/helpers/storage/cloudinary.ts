@@ -1,17 +1,23 @@
 import { v2 as cloudinary } from "cloudinary";
+import { fromBuffer } from "file-type";
 
-export const upload = async (payload, folder: string = "users") => {
+export const upload = async (payload: any) => {
   try {
-    const parts = payload.name.split(".");
-    const ext = parts[parts.length - 1];
-    const id = Date.now();
-    const file_name = `${id}.${ext}`;
+    const upload = await cloudinary.uploader.upload(payload.path);
+    return upload.secure_url;
+  } catch (error) {
+    return false;
+  }
+};
 
-    const resource_type = payload.type.split("/")[0];
-    const upload = await cloudinary.uploader.upload(payload.path, {
-      public_id: `${folder}/${file_name}`,
-      resource_type,
-    });
+export const uploadBase64 = async (payloadString: string) => {
+  try {
+    const mimeInfo = await fromBuffer(Buffer.from(payloadString, "base64"));
+    payloadString = payloadString.startsWith("data:")
+      ? payloadString
+      : `data:${mimeInfo.mime};base64,${payloadString}`;
+
+    const upload = await cloudinary.uploader.upload(payloadString);
     return upload.secure_url;
   } catch (error) {
     return false;

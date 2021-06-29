@@ -1,6 +1,8 @@
 import crypto from "crypto";
 import { transaction } from "../types/interfaces/request";
 
+const { PAYSTACK_SECRET_KEY } = process.env;
+
 export const initiateTransaction = (
   params: transaction.initiateTransaction
 ) => {
@@ -11,7 +13,7 @@ export const handleWebhook = (params: transaction.webhook) => {
   const { headers, body } = params;
 
   const hash = crypto
-    .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
+    .createHmac("sha512", PAYSTACK_SECRET_KEY)
     .update(JSON.stringify(body))
     .digest("hex");
 

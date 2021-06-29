@@ -1,5 +1,7 @@
 import SendGridMail from "@sendgrid/mail";
 
+const { SENDGRID_API_KEY } = process.env;
+
 export const send = async (
   to: string,
   subject: string,
@@ -8,7 +10,7 @@ export const send = async (
   from: string = "Claret Nnamocha <devclareo@gmail.com>"
 ) => {
   try {
-    SendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
+    SendGridMail.setApiKey(SENDGRID_API_KEY);
 
     const msg = { to, subject, text, html, from };
 

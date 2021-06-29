@@ -9,7 +9,6 @@ import routes from "./routes";
 
 const app = express();
 const port: number = env.port;
-
 // db.authenticate(db.db);
 
 app.use(formdata.parse());

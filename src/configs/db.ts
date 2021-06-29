@@ -1,9 +1,9 @@
 import { Sequelize, SequelizeScopeError } from "sequelize";
 import { v4 as uuid } from "uuid";
-import { dbURL } from "./env";
+import { dbURL, dialect } from "./env";
 
 export const db = new Sequelize(dbURL, {
-  dialect: "postgres",
+  dialect,
   dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
   logging: false,
 });
@@ -22,7 +22,8 @@ const seed = async (schemas: any) => {
     verifiedemail: true,
   });
 
-  // todo: plant other seeds
+  // todo: plant other db seeds 😎
+
   console.log("Seeded");
 };
 

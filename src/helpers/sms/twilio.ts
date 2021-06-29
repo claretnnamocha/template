@@ -1,15 +1,14 @@
 import Twilio from "twilio";
 
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SENDER_ID } = process.env;
+
 export const send = async (
   to: string,
   body: string,
-  from: string = "AfrimMart"
+  from: string = TWILIO_SENDER_ID
 ) => {
   try {
-    const twilio = Twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
-    );
+    const twilio = Twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
     const message = await twilio.messages.create({
       to,
