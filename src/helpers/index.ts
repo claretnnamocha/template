@@ -4,7 +4,7 @@ export * as mail from "./mail";
 import request from "./request";
 import response from "./response";
 // export * as sms from "./sms";
-// export * as storage from "./storage";
+export * as storage from "./storage";
 export * as types from "./types";
 
 export { response, request };
