@@ -1,7 +1,7 @@
 import { S3 } from "aws-sdk";
-// import { fromBuffer } from "file-type";
-// import fs from "fs";
-// import { v4 as uuid } from "uuid";
+import { fromBuffer } from "file-type";
+import fs from "fs";
+import { v4 as uuid } from "uuid";
 
 // const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME } =
 //   process.env;
