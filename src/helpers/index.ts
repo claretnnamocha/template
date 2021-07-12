@@ -1,5 +1,5 @@
 export * as jwt from "./jwt";
-// export * as mail from "./mail";
+export * as mail from "./mail";
 // export * as payments from "./payments";
 // export request from "./request";
 import response from "./response";
