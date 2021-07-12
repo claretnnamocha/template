@@ -1,9 +1,8 @@
 import JWT from "jsonwebtoken";
 import { env } from "../configs";
-import { User } from "../schemas";
 
-export const generate = (userId: string) => {
-  return JWT.sign({ userId, timestamp: Date.now() }, env.jwtSecret, {
+export const generate = (payload: any) => {
+  return JWT.sign({ payload, timestamp: Date.now() }, env.jwtSecret, {
     expiresIn: env.jwtExpirationTime,
   });
 };
@@ -14,11 +13,11 @@ export const verify = async (token: string) => {
     const data: any = JWT.verify(token, env.jwtSecret);
 
     let {
-      data: { userId },
+      data: { payload },
     } = data;
-    if (!userId) return false;
+    if (!payload) return false;
 
-    return (await User.findByPk(userId)) !== null;
+    return payload;
   } catch (error) {
     return false;
   }

@@ -16,7 +16,7 @@ export default async (
     if (!authorization)
       return response(res, { status: false, message: "Unauthorized" }, 401);
 
-    const { userId }: any = JWT.verify(
+    const { payload: userId }: any = JWT.verify(
       authorization.replace("Bearer ", ""),
       env.jwtSecret
     );

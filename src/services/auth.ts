@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
+import { nanoid } from "nanoid";
 import { Op } from "sequelize";
 import { v4 as uuid } from "uuid";
-import { jwt, mail, others } from "../helpers";
+import { jwt, mail } from "../helpers";
 import { service } from "../helpers/types/interfaces";
 import { auth } from "../helpers/types/interfaces/request";
 import { TokenSchema, UserSchema } from "../helpers/types/schemas";
@@ -34,7 +35,7 @@ export const signUp = async (
       ...params,
     });
 
-    const token = await others.generateToken(id);
+    const token = await generateToken(id);
 
     await mail.sendgrid.send(
       email,
@@ -76,7 +77,7 @@ export const signIn = async (
     }
 
     if (!_user.verifiedemail) {
-      const token = await others.generateToken(_user.id);
+      const token = await generateToken(_user.id);
       await mail.sendgrid.send(
         _user.email,
         "Verify Email",
@@ -157,7 +158,7 @@ export const resendVerificationAccount = async (
       return { status: false, message: "You are already verified" };
     }
 
-    const token = await others.generateToken(user.id);
+    const token = await generateToken(user.id);
     await mail.sendgrid.send(
       user.email,
       "Verify Email",
@@ -188,7 +189,7 @@ export const initiateReset = async (
       return { status: true, message: "Check your email" };
     }
 
-    const token = await others.generateToken(user.id, "reset");
+    const token = await generateToken(user.id, "reset");
 
     await mail.sendgrid.send(
       user.email,
@@ -234,7 +235,7 @@ export const verifyReset = async (
       return { status: false, message: "An error occured" };
     }
 
-    const data = await others.generateToken(user.id, "update");
+    const data = await generateToken(user.id, "update");
 
     return { status: true, message: "Valid token", data };
   } catch (error) {
@@ -281,4 +282,29 @@ export const resetPassword = async (
       message: "Error trying to reset password",
     };
   }
+};
+
+const generateToken = async (
+  userId: string,
+  tokenType: string = "verify",
+  medium: string = "email",
+  expiresMins: number = 5
+) => {
+  await Token.update(
+    { active: false },
+    { where: { UserId: userId, tokenType, active: true } }
+  );
+
+  const token = nanoid(10);
+
+  await Token.create({
+    id: uuid(),
+    tokenType,
+    token,
+    UserId: userId,
+    medium,
+    expires: Date.now() + 60 * 1000 * expiresMins,
+  });
+
+  return token;
 };
