@@ -1,9 +1,7 @@
-import { S3 } from "aws-sdk";
+import S3 from "aws-sdk/clients/s3";
 import { fromBuffer } from "file-type";
 import fs from "fs";
-
 import { v4 as uuid } from "uuid";
-require('https').globalAgent.maxSockets = 100
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME } =
   process.env;
