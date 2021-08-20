@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Project Template",
+  "description": "Backend Template",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
