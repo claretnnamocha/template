@@ -1,5 +1,2 @@
-import * as interfaces from "./interfaces";
-import * as schemas from "./schemas";
-
-export { interfaces, schemas };
-
+export * as interfaces from "./interfaces";
+export * as schemas from "./schemas";

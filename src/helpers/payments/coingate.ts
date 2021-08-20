@@ -1,38 +1,46 @@
+import fetch from "node-fetch";
 import { v4 as uuid } from "uuid";
-import { request } from "../";
 import { transaction } from "../types/interfaces/request";
 
 const { COINGATE_BASEURL, COINGATE_CALLBACK_URL, COINGATE_APIKEY } =
   process.env;
 
-export const initiateTransaction = (
+export const initiateTransaction = async (
   params: transaction.initiateTransaction
 ) => {
   const order_id = uuid();
 
-  const order: any = request(
-    `${COINGATE_BASEURL}/orders`,
-    "post",
-    {
+  let response: any = await fetch(`${COINGATE_BASEURL}/orders`, {
+    method: "post",
+    body: JSON.stringify({
       order_id,
       price_amount: params.amount,
       price_currency: "ngn",
       receive_currency: "ngn",
       callback_url: COINGATE_CALLBACK_URL,
+    }),
+    headers: {
+      Authorization: COINGATE_APIKEY,
+      "content-type": "application/json",
     },
-    { Authorization: COINGATE_APIKEY }
-  );
+  });
+
+  const order = await response.json();
 
   if (!order.id) {
     return false;
   }
 
-  const checkOut: any = request(
-    `${COINGATE_BASEURL}/orders/${order.id}/checkout`,
-    "post",
-    { pay_currency: params.metadata.currency },
-    { Authorization: COINGATE_APIKEY }
-  );
+  response = await fetch(`${COINGATE_BASEURL}/orders/${order.id}/checkout`, {
+    method: "post",
+    body: JSON.stringify({ pay_currency: params.metadata.currency }),
+    headers: {
+      Authorization: COINGATE_APIKEY,
+      "content-type": "application/json",
+    },
+  });
+
+  const checkOut: any = await response.json();
 
   if (!checkOut.id) {
     return false;

@@ -48,5 +48,3 @@ export const uploadBase64 = async (payloadString: string) => {
     return false;
   }
 };
-
-export const hello = "world";

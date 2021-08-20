@@ -16,8 +16,8 @@ export const send = async (
 
     await SendGridMail.send(msg);
 
-    return { status: true, message: "Mail sent successfully!" };
+    return true;
   } catch (error) {
-    return { status: false, message: "Mail failed to send, try again later!" };
+    return false;
   }
 };

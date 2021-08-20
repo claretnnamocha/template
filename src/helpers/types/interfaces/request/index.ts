@@ -1,6 +1,4 @@
-import * as auth from "./auth";
-import * as others from "./others";
-import * as transaction from "./transaction";
-import * as user from "./user";
-
-export { auth, user, others, transaction };
+export * as auth from "./auth";
+export * as others from "./others";
+export * as transaction from "./transaction";
+export * as user from "./user";

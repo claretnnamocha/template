@@ -1,5 +1,3 @@
-import * as env from "./env";
-import * as db from "./db";
-import * as swagger from "./swagger";
-
-export { env, db, swagger };
+export * as env from "./env";
+export * as db from "./db";
+export * as swagger from "./swagger";

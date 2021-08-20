@@ -6,7 +6,8 @@ export * as sms from "./sms";
 export * as storage from "./storage";
 export * as types from "./types";
 
+import math from "./math";
 import request from "./request";
 import response from "./response";
 
-export { response, request };
+export { response, request, math };
