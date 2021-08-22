@@ -1,14 +1,14 @@
 import fetch from "node-fetch";
 
-const { NETCORE_API } = process.env;
+const { NETCORE_API, EMAIL_FROM, EMAIL_NAME } = process.env;
 
 export const send = async (
   to: string,
   subject: string,
   text: string,
   html: string = null,
-  from: string = "devclareo@gmail.com",
-  fromName: string = "Claret Nnamocha"
+  from: string = EMAIL_FROM,
+  fromName: string = EMAIL_NAME
 ) => {
   try {
     const options = {

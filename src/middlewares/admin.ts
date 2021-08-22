@@ -5,7 +5,7 @@ import { response, types } from "../helpers";
 import { UserSchema } from "../helpers/types/schemas";
 import { User } from "../schemas";
 
-export default async (
+export const admin = async (
   req: types.interfaces.request.others.CustomRequest,
   res: Response,
   next: NextFunction

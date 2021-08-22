@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import Joi from "joi";
 import { response, types } from "../helpers";
 
-export default (obj: object) => {
+export const validate = (obj: object) => {
   return (
     req: types.interfaces.request.others.CustomRequest,
     res: Response,

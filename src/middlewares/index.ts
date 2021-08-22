@@ -1,5 +1,3 @@
-import admin from "./admin";
-import authenticate from "./authenticate";
-import validate from "./validate";
-
-export { validate, authenticate, admin };
+export { admin } from "./admin";
+export { authenticate } from "./authenticate";
+export { validate } from "./validate";

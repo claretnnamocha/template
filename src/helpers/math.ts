@@ -1,3 +1,3 @@
-import math from "mathjs";
+import m from "mathjs";
 
-export default math;
+export const math = m;

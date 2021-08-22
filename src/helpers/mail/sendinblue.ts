@@ -1,14 +1,14 @@
 import SibApiV3Sdk from "sib-api-v3-sdk";
 
-const { SENDINBLUE_API_KEY } = process.env;
+const { SENDINBLUE_API_KEY, EMAIL_FROM, EMAIL_NAME } = process.env;
 
 export const send = async (
   to: string,
   subject: string,
   text: string,
   html: string = null,
-  from: string = "devclareo@gmail.com",
-  fromName: string = "Claret Nnamocha"
+  from: string = EMAIL_FROM,
+  fromName: string = EMAIL_NAME
 ) => {
   try {
     let defaultClient = SibApiV3Sdk.ApiClient.instance;
