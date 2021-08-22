@@ -3,8 +3,8 @@ import { nanoid } from "nanoid";
 import { Op } from "sequelize";
 import { v4 as uuid } from "uuid";
 import { jwt, mail } from "../helpers";
-import { Token, User } from "../schemas";
-import { TokenSchema, UserSchema } from "../types/schemas";
+import { Token, User } from "../models";
+import { TokenSchema, UserSchema } from "../types/models";
 import { auth, others as service } from "../types/services";
 
 /**

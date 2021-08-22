@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
-import { User } from "../schemas";
-import { UserSchema } from "../types/schemas";
+import { User } from "../models";
+import { UserSchema } from "../types/models";
 import { others, others as service, user } from "../types/services";
 
 /**

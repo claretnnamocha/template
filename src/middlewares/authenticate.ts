@@ -2,10 +2,10 @@ import { NextFunction, Response } from "express";
 import JWT from "jsonwebtoken";
 import { env } from "../configs";
 import { response } from "../helpers";
-import { User } from "../schemas";
+import { User } from "../models";
 import { CustomRequest } from "../types/controllers";
 import { auth } from "../types/middlewares";
-import { UserSchema } from "../types/schemas";
+import { UserSchema } from "../types/models";
 
 export const authenticate =
   (params: auth = { isAdmin: false }) =>

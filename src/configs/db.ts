@@ -8,10 +8,10 @@ export const db = new Sequelize(dbURL, {
   logging: false,
 });
 
-const seed = async (schemas: any) => {
+const seed = async (models: any) => {
   console.log("DB cleared");
 
-  await schemas.User.create({
+  await models.User.create({
     id: uuid(),
     username: "alpha",
     email: "devclareo@gmail.com",
@@ -31,10 +31,10 @@ export const authenticate = (db: Sequelize, clear: boolean = false) => {
   db.authenticate()
     .then(async () => {
       console.log("Connection to Database has been established successfully.");
-      const schemas = require("../schemas");
+      const models = require("../models");
       const opts = clear ? { force: true } : { alter: true };
-      for (let schema in schemas) await schemas[schema].sync(opts);
-      if (clear) await seed(schemas);
+      for (let schema in models) await models[schema].sync(opts);
+      if (clear) await seed(models);
       console.log("Migrated");
     })
     .catch((error: SequelizeScopeError) =>
