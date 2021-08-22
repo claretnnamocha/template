@@ -20,11 +20,9 @@ const { error, value: _env } = schema.validate(process.env);
 
 if (error) throw error;
 
-const env = _env.NODE_ENV;
-const port = _env.PORT;
-const dbURL = _env.DB_URL;
-const jwtSecret = _env.JWT_SECRET;
-const jwtExpirationTime = _env.JWT_EXPIRATION_TIME;
-const dialect = _env.DB_DIALECT;
-
-export { env, port, dbURL, jwtSecret, jwtExpirationTime, dialect };
+export const env = _env.NODE_ENV;
+export const port = _env.PORT;
+export const dbURL = _env.DB_URL;
+export const jwtSecret = _env.JWT_SECRET;
+export const jwtExpirationTime = _env.JWT_EXPIRATION_TIME;
+export const dialect = _env.DB_DIALECT;

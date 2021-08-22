@@ -1,4 +1,4 @@
-export default interface UserInterface {
+export interface TokenInterface {
   id?: string;
   UserId?: string;
   token?: string;

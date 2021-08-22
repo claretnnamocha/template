@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { response } from "../helpers";
-import { CustomRequest } from "../helpers/types/interfaces/request/others";
 import { user } from "../services";
+import { CustomRequest } from "../types/controllers";
 
 export const changePassword = async (req: CustomRequest, res: Response) => {
   const data = await user.changePassword(req.form);

@@ -38,6 +38,6 @@ export const authenticate = (db: Sequelize, clear: boolean = false) => {
       console.log("Migrated");
     })
     .catch((error: SequelizeScopeError) =>
-      console.error("Unable to connect to the database" + error)
+      console.error("Unable to connect to the database: " + error.message)
     );
 };

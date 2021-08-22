@@ -1,12 +1,12 @@
 import fetch from "node-fetch";
 import { v4 as uuid } from "uuid";
-import { transaction } from "../types/interfaces/request";
+import { payments } from "../../types/helpers";
 
 const { COINGATE_BASEURL, COINGATE_CALLBACK_URL, COINGATE_APIKEY } =
   process.env;
 
 export const initiateTransaction = async (
-  params: transaction.initiateTransaction
+  params: payments.initiateTransaction
 ) => {
   const order_id = uuid();
 
@@ -46,7 +46,7 @@ export const initiateTransaction = async (
     return false;
   }
 
-  // todo: handle transaction init checkOut object
+  // todo: handle payments init checkOut object
   //   {
   //     "id": int,
   //     "order_id": string,
@@ -62,7 +62,7 @@ export const initiateTransaction = async (
   // }
 };
 
-export const handleWebhook = (params: transaction.webhook) => {
+export const handleWebhook = (params: payments.webhook) => {
   const { body } = params;
 
   const payload = body;

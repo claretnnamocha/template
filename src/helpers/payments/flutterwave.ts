@@ -1,14 +1,12 @@
-import { transaction } from "../types/interfaces/request";
+import { payments } from "../../types/helpers";
 
 const { FLUTTERWAVE_HASH } = process.env;
 
-export const initiateTransaction = (
-  params: transaction.initiateTransaction
-) => {
-  // todo: handle transaction init
+export const initiateTransaction = (params: payments.initiateTransaction) => {
+  // todo: handle payments init
 };
 
-export const handleWebhook = (params: transaction.webhook) => {
+export const handleWebhook = (params: payments.webhook) => {
   const { headers, body } = params;
 
   if (headers["verif-hash"] !== FLUTTERWAVE_HASH) {

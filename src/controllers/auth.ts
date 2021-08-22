@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { response } from "../helpers";
-import { CustomRequest } from "../helpers/types/interfaces/request/others";
 import { auth } from "../services";
+import { CustomRequest } from "../types/controllers";
 
 export const signUp = async (req: CustomRequest, res: Response) => {
   const data = await auth.signUp(req.form);

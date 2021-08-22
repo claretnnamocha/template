@@ -1,9 +1,8 @@
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
-import { service } from "../helpers/types/interfaces";
-import { others, user } from "../helpers/types/interfaces/request";
-import { UserSchema } from "../helpers/types/schemas";
 import { User } from "../schemas";
+import { UserSchema } from "../types/schemas";
+import { others, others as service, user } from "../types/services";
 
 /**
  * Change password

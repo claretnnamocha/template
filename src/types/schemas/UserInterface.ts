@@ -1,4 +1,4 @@
-export default interface OrganisationMemberInterface {
+export interface UserInterface {
   id?: string;
   firstname?: string;
   lastname?: string;

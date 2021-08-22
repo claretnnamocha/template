@@ -1,15 +1,15 @@
 import crypto from "crypto";
-import { transaction } from "../types/interfaces/request";
+import { payments } from "../../types/helpers";
 
 const { PAYSTACK_SECRET_KEY } = process.env;
 
 export const initiateTransaction = (
-  params: transaction.initiateTransaction
+  params: payments.initiateTransaction
 ) => {
-  // todo: handle transaction init
+  // todo: handle payments init
 };
 
-export const handleWebhook = (params: transaction.webhook) => {
+export const handleWebhook = (params: payments.webhook) => {
   const { headers, body } = params;
 
   const hash = crypto

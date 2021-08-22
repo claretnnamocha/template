@@ -3,10 +3,9 @@ import { nanoid } from "nanoid";
 import { Op } from "sequelize";
 import { v4 as uuid } from "uuid";
 import { jwt, mail } from "../helpers";
-import { service } from "../helpers/types/interfaces";
-import { auth } from "../helpers/types/interfaces/request";
-import { TokenSchema, UserSchema } from "../helpers/types/schemas";
 import { Token, User } from "../schemas";
+import { TokenSchema, UserSchema } from "../types/schemas";
+import { auth, others as service } from "../types/services";
 
 /**
  * Creates user account
