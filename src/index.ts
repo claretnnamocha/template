@@ -2,11 +2,15 @@ import cors from "cors";
 import { config } from "dotenv";
 import express, { NextFunction, Response } from "express";
 import formdata from "express-form-data";
+import { graphqlHTTP } from "express-graphql";
+import {
+  GraphQLObjectType, GraphQLSchema, GraphQLString
+} from "graphql";
 import swaggerUi from "swagger-ui-express";
 import { db, env, swagger } from "./configs";
 import { response } from "./helpers";
-import { CustomRequest } from "./types/controllers";
 import routes from "./routes";
+import { CustomRequest } from "./types/controllers";
 
 config();
 const app = express();
@@ -19,6 +23,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger.config));
+
+const schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: "RootQueryType",
+    fields: {
+      hello: {
+        type: GraphQLString,
+        resolve() {
+          return "world";
+        },
+      },
+    },
+  }),
+});
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema,
+    graphiql: true,
+  })
+);
+
 app.use("", routes);
 
 app.use((err: Error, req: CustomRequest, res: Response, next: NextFunction) => {
