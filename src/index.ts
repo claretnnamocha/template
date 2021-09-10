@@ -14,8 +14,8 @@ const port: number = env.port;
 db.authenticate(db.db);
 
 app.use(formdata.parse());
-app.use(express.json({ type: "application/json" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "100mb", type: "application/json" }));
+app.use(express.urlencoded({ limit: "100mb", extended: true }));
 app.use(cors());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swagger.config));

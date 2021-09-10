@@ -53,6 +53,7 @@
     "sequelize-typescript": "^2.1.0",
     "short-uuid": "^4.1.0",
     "sib-api-v3-sdk": "^8.2.1",
+    "slack-notify": "^0.1.7",
     "swagger-jsdoc": "^6.0.2",
     "swagger-ui-express": "^4.1.6",
     "ts-node": "^9.1.1",
