@@ -32,7 +32,6 @@
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "bull": "^3.29.3",
-    "bullmq": "^1.50.5",
     "cloudinary": "^1.25.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
