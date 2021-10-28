@@ -1,35 +1,33 @@
+import Bull from "bull";
 import SibApiV3Sdk from "sib-api-v3-sdk";
+import { sendEmail } from "./send";
 
-const { SENDINBLUE_API_KEY, EMAIL_FROM, EMAIL_NAME } = process.env;
+const { SENDINBLUE_API_KEY } = process.env;
 
-export const send = async (
-  to: string,
-  subject: string,
-  text: string,
-  html: string = null,
-  from: string = EMAIL_FROM,
-  fromName: string = EMAIL_NAME
-) => {
-  try {
-    let defaultClient = SibApiV3Sdk.ApiClient.instance;
+const _send = async (job: Bull.Job) => {
+  let { to, subject, text, html, from, fromName } = job.data;
 
-    let apiKey = defaultClient.authentications["api-key"];
-    apiKey.apiKey = SENDINBLUE_API_KEY;
+  let defaultClient = SibApiV3Sdk.ApiClient.instance;
 
-    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  let apiKey = defaultClient.authentications["api-key"];
+  apiKey.apiKey = SENDINBLUE_API_KEY;
 
-    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+  let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-    sendSmtpEmail.sender = { name: fromName, email: from };
-    sendSmtpEmail.subject = subject;
-    sendSmtpEmail.htmlContent = html;
-    sendSmtpEmail.textContent = text;
+  let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-    sendSmtpEmail.to = [{ email: to }];
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
+  sendSmtpEmail.sender = { name: fromName, email: from };
+  sendSmtpEmail.subject = subject;
+  sendSmtpEmail.htmlContent = html;
+  sendSmtpEmail.textContent = text;
 
-    return true;
-  } catch (error) {
-    return false;
-  }
+  sendSmtpEmail.to = [{ email: to }];
+  await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+  return true;
 };
+
+export const send = sendEmail({
+  callback: _send,
+  queueName: "SendinBlue Email",
+});

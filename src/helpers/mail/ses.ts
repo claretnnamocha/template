@@ -1,62 +1,55 @@
 import SES from "aws-sdk/clients/ses";
+import Bull from "bull";
+import { sendEmail } from "./send";
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, EMAIL_FROM, EMAIL_NAME } =
-  process.env;
+const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } = process.env;
 
-export const send = async (
-  to: string,
-  subject: string,
-  text: string,
-  html: string = null,
-  from: string = EMAIL_FROM,
-  fromName: string = EMAIL_NAME
-) => {
-  try {
-    const ses = new SES({
-      accessKeyId: AWS_ACCESS_KEY_ID,
-      secretAccessKey: AWS_SECRET_ACCESS_KEY,
-      apiVersion: "2010-12-01",
-      region: "ap-south-1",
-    });
+const _send = async (job: Bull.Job) => {
+  let { to, subject, text, html, from, fromName } = job.data;
+  const ses = new SES({
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    apiVersion: "2010-12-01",
+    region: "ap-south-1",
+  });
 
-    from = `${fromName} <${from}>`;
+  from = `${fromName} <${from}>`;
 
-    const params = {
-      Destination: {
-        ToAddresses: [to],
-      },
-      Source: from,
-      Message: {
-        Body: {
-          Text: {
-            Data: text,
-            Charset: "utf-8",
-          },
-          Html: {
-            Data: html,
-            Charset: "utf-8",
-          },
+  const params = {
+    Destination: {
+      ToAddresses: [to],
+    },
+    Source: from,
+    Message: {
+      Body: {
+        Text: {
+          Data: text,
+          Charset: "utf-8",
         },
-        Subject: {
-          Data: subject,
+        Html: {
+          Data: html,
+          Charset: "utf-8",
         },
       },
-    };
+      Subject: {
+        Data: subject,
+      },
+    },
+  };
 
-    const send = new Promise((resolve, reject) => {
-      ses.sendEmail(params, function (err, data) {
-        if (err) {
-          reject(err.message);
-        } else {
-          resolve(data);
-        }
-      });
+  const send = new Promise((resolve, reject) => {
+    ses.sendEmail(params, function (err, data) {
+      if (err) {
+        reject(err.message);
+      } else {
+        resolve(data);
+      }
     });
+  });
 
-    await send;
+  await send;
 
-    return true;
-  } catch (e) {
-    return false;
-  }
+  return true;
 };
+
+export const send = sendEmail({ callback: _send, queueName: "SES Email" });
