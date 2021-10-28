@@ -1,4 +1,6 @@
 import Africastalking from "africastalking";
+import Bull from "bull";
+import { sendSMS } from "./send";
 
 const {
   AFRICASTALKING_APIKEY,
@@ -6,23 +8,23 @@ const {
   AFRICASTALKING_SENDER_ID,
 } = process.env;
 
-export const send = async (
-  to: string,
-  body: string,
-  from: string = AFRICASTALKING_SENDER_ID
-) => {
-  try {
-    const credentials = {
-      apiKey: AFRICASTALKING_APIKEY,
-      username: AFRICASTALKING_USERNAME,
-    };
+const _send = async (job: Bull.Job) => {
+  let { to, from, body } = job.data;
 
-    const { SMS } = Africastalking(credentials);
+  const credentials = {
+    apiKey: AFRICASTALKING_APIKEY,
+    username: AFRICASTALKING_USERNAME,
+  };
 
-    const message = await SMS.send({ to, from, message: body });
+  const { SMS } = Africastalking(credentials);
 
-    return message != null;
-  } catch (error) {
-    return false;
-  }
+  const message = await SMS.send({ to, from, message: body });
+
+  return message != null;
 };
+
+export const send = sendSMS({
+  callback: _send,
+  queueName: "Twilio SMS",
+  from: AFRICASTALKING_SENDER_ID,
+});

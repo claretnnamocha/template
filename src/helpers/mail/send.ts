@@ -1,6 +1,6 @@
 import * as jobs from "../../jobs";
 import { EmailQueue } from "../../jobs/queues";
-import { mail } from "../../types";
+import { mail } from "../../types/helpers";
 
 const { EMAIL_FROM, EMAIL_NAME } = process.env;
 
