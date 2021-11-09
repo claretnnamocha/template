@@ -966,6 +966,11 @@ content-disposition@0.5.3:
   dependencies:
     safe-buffer "5.1.2"
 
+content-security-policy@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/content-security-policy/-/content-security-policy-0.3.4.tgz#4fd8b8c8487ee24f886cdacbdc168742557ba99d"
+  integrity sha512-phs2wrE6w0M93NRe0UavgeMfqDJttgfGCGMKF4h8PF4HAb5e72BltgXctn1DPI3lBgMgtlN7gJ5GOAa/bmBVFQ==
+
 content-type@~1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.4.tgz#e138cc75e040c727b1966fe5e5f8c9aee256fe3b"
@@ -2870,6 +2875,11 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
+permissions-policy@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/permissions-policy/-/permissions-policy-0.6.0.tgz#9c01b1a8e360ab4955e20a7946abcb0fd34d276d"
+  integrity sha512-VfN72swhRiuvfejFP/N5hOVCyriBgzy1KiLE8mjN2KkCJCOtFv2N221SVUHYl0OPXIOoqu7tkc7efreiN7encA==
+
 pg-connection-string@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/pg-connection-string/-/pg-connection-string-2.5.0.tgz#538cadd0f7e603fc09a12590f3b8a452c2c0cf34"
@@ -3165,6 +3175,11 @@ redis-parser@^3.0.0:
   integrity sha1-tm2CjNyv5rS4pCin3vTGvKwxyLQ=
   dependencies:
     redis-errors "^1.0.0"
+
+referrer-policy@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/referrer-policy/-/referrer-policy-1.2.0.tgz#b99cfb8b57090dc454895ef897a4cc35ef67a98e"
+  integrity sha512-LgQJIuS6nAy1Jd88DCQRemyE3mS+ispwlqMk3b0yjZ257fI1v9c+/p6SD5gP5FGyXUIgrNOAfmyioHwZtYv2VA==
 
 regenerator-runtime@^0.13.4:
   version "0.13.9"
@@ -3476,6 +3491,11 @@ standard-as-callback@^2.1.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+strict-transport-security@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/strict-transport-security/-/strict-transport-security-0.3.0.tgz#8d8665de1553079a63b09a86d55a1a01d83c93e3"
+  integrity sha512-kFE7mnIaiHGmPTdfeME+vEW2WDAPu0H7CNSbA+WuCMXRiadAfOOX/SfOj9NV/2ANc2z5JHMG9lnSvSaj3I+9sQ==
 
 string-width@^1.0.1:
   version "1.0.2"
@@ -4041,6 +4061,11 @@ write-file-atomic@^3.0.0:
     is-typedarray "^1.0.0"
     signal-exit "^3.0.2"
     typedarray-to-buffer "^3.1.5"
+
+x-frame-options@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/x-frame-options/-/x-frame-options-1.0.0.tgz#ff9c1ca944b916a9bc27d6672a8b39b5b08b427f"
+  integrity sha1-/5wcqUS5Fqm8J9ZnKos5tbCLQn8=
 
 xdg-basedir@^4.0.0:
   version "4.0.0"
