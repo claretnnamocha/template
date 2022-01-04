@@ -16,21 +16,3 @@ export const controller =
       );
     }
   };
-
-const sanitize = (obj) => {
-  let _obj = JSON.parse(JSON.stringify(obj));
-  for (let index in _obj) {
-    const found = ["pin", "password", "token"].some((s) =>
-      index.toLowerCase().includes(s)
-    );
-    if (found) _obj[index] = "-classified-";
-
-    if (
-      typeof _obj[index] === "object" &&
-      !Array.isArray(_obj[index]) &&
-      _obj[index] !== null
-    )
-      _obj[index] = sanitize(_obj[index]);
-  }
-  return _obj;
-};
