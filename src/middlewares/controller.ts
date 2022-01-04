@@ -5,7 +5,7 @@ import { CustomRequest } from "../types/controllers";
 export const controller =
   (fn: Function) => async (req: CustomRequest, res: Response) => {
     try {
-      const data = await fn(req, res);
+      const data = await fn(req);
 
       return response(res, data, data.status ? 200 : 400);
     } catch (e) {
