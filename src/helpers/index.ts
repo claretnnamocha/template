@@ -7,3 +7,4 @@ export { request } from "./request";
 export { response } from "./response";
 export * as sms from "./sms";
 export * as storage from "./storage";
+export * as utilities from "./utilities";
