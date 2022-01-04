@@ -10,7 +10,8 @@ export const validate =
     const value = req.method == "GET" ? req.query : req.body;
     const { error, value: vars } = schema.validate(value);
 
-    if (error) return response(res, { status: false, message: error.message });
+    if (error)
+      return response(res, { status: false, message: error.message }, 400);
 
     req.form = req.form || {};
 

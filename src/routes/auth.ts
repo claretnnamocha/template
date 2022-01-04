@@ -1,34 +1,42 @@
 import { Router } from "express";
 import { auth } from "../controllers";
-import { validate } from "../middlewares";
+import { controller, validate } from "../middlewares";
 import { auth as validator } from "../validators";
 
 const routes = Router();
 
-routes.post("/sign-up", validate(validator.signUp), auth.signUp);
+routes.post("/sign-up", validate(validator.signUp), controller(auth.signUp));
 
-routes.post("/sign-in", validate(validator.signIn), auth.signIn);
+routes.post("/sign-in", validate(validator.signIn), controller(auth.signIn));
 
-routes.get("/verify", validate(validator.verify), auth.verifyAccount);
+routes.get(
+  "/verify",
+  validate(validator.verify),
+  controller(auth.verifyAccount)
+);
 
 routes.get(
   "/resend-verification",
   validate(validator.resendVerification),
-  auth.resendVerificationAccount
+  controller(auth.resendVerificationAccount)
 );
 
 routes.post(
   "/initiate-reset",
   validate(validator.initiateReset),
-  auth.initiateReset
+  controller(auth.initiateReset)
 );
 
-routes.get("/verify-reset", validate(validator.verifyReset), auth.verifyReset);
+routes.get(
+  "/verify-reset",
+  validate(validator.verifyReset),
+  controller(auth.verifyReset)
+);
 
 routes.put(
   "/reset-password",
   validate(validator.updateReset),
-  auth.resetPassword
+  controller(auth.resetPassword)
 );
 
 export default routes;

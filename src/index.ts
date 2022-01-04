@@ -25,7 +25,7 @@ security.lock(app);
 
 app.use("", routes);
 
-app.use((err: Error, req: CustomRequest, res: Response, next: NextFunction) => {
+app.use((err: Error, _: CustomRequest, res: Response, __: NextFunction) => {
   return response(
     res,
     { status: false, message: `Internal server error: ${err.message}` },

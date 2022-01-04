@@ -9,7 +9,11 @@ paths:
         - Bearer: []
       responses:
         200:
-          description: Status and message and data
+          description: Success
+        400:
+          description: Error
+        500:
+          description: Server down
 
   /user/change-password:
     put:
@@ -27,7 +31,11 @@ paths:
             $ref: "#/definitions/changePassword"
       responses:
         200:
-          description: Status and message and data
+          description: Success
+        400:
+          description: Error
+        500:
+          description: Server down
 
   /user/edit-profile:
     put:
@@ -45,7 +53,11 @@ paths:
             $ref: "#/definitions/editProfile"
       responses:
         200:
-          description: Status and message and data
+          description: Success
+        400:
+          description: Error
+        500:
+          description: Server down
 
 definitions:
   changePassword:
