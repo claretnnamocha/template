@@ -1,14 +1,11 @@
 import cors from "cors";
-import { config } from "dotenv";
-import express, { NextFunction, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import formdata from "express-form-data";
 import swaggerUi from "swagger-ui-express";
 import { bullBoard, db, env, security, swagger } from "./configs";
 import { response } from "./helpers";
 import routes from "./routes";
-import { CustomRequest } from "./types/controllers";
 
-config();
 const app = express();
 const port: number = env.port;
 db.authenticate(db.db);
@@ -25,7 +22,7 @@ security.lock(app);
 
 app.use("", routes);
 
-app.use((err: Error, _: CustomRequest, res: Response, __: NextFunction) => {
+app.use((err: Error, _: Request, res: Response, __: NextFunction) => {
   return response(
     res,
     { status: false, message: `Internal server error: ${err.message}` },

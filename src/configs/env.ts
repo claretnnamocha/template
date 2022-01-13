@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import Joi from "joi";
 
-dotenv.config();
+config();
 
 const schema = Joi.object({
   NODE_ENV: Joi.string()
@@ -16,13 +16,13 @@ const schema = Joi.object({
   .unknown()
   .required();
 
-const { error, value: _env } = schema.validate(process.env);
+const { error, value } = schema.validate(process.env);
 
 if (error) throw error;
 
-export const env = _env.NODE_ENV;
-export const port = _env.PORT;
-export const dbURL = _env.DB_URL;
-export const jwtSecret = _env.JWT_SECRET;
-export const jwtExpirationTime = _env.JWT_EXPIRATION_TIME;
-export const dialect = _env.DB_DIALECT;
+export const env = value.NODE_ENV;
+export const port = value.PORT;
+export const dbURL = value.DB_URL;
+export const jwtSecret = value.JWT_SECRET;
+export const jwtExpirationTime = value.JWT_EXPIRATION_TIME;
+export const dialect = value.DB_DIALECT;
