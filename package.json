@@ -43,6 +43,7 @@
     "node-fetch": "^2.6.1",
     "permissions-policy": "^0.6.0",
     "pg": "^8.5.1",
+    "randomstring": "^1.2.1",
     "referrer-policy": "^1.2.0",
     "sequelize": "^6.5.1",
     "sequelize-typescript": "^2.1.0",

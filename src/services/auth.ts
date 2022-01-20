@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { nanoid } from "nanoid";
+import randomstring from "randomstring";
 import { Op } from "sequelize";
 import { v4 as uuid } from "uuid";
 import { jwt, mail } from "../helpers";
@@ -34,14 +34,14 @@ export const signUp = async (
       ...params,
     });
 
-    const token = await generateToken(id);
+    const token = await generateToken({ userId: id });
 
-    await mail.sendgrid.send(
-      email,
-      "Registration Complete",
-      `Registration successful your token is ${token}`,
-      `<b>Registration successful</b><p>your token is ${token}`
-    );
+    await mail.sendgrid.send({
+      to: email,
+      subject: "Registration Complete",
+      text: `Registration successful your token is ${token}`,
+      html: `<b>Registration successful</b><p>your token is ${token}`,
+    });
 
     return { status: true, message: "Registration Successful" };
   } catch (error) {
@@ -76,18 +76,18 @@ export const signIn = async (
     }
 
     if (!_user.verifiedemail) {
-      const token = await generateToken(_user.id);
-      await mail.sendgrid.send(
-        _user.email,
-        "Verify Email",
-        `Verify email: ${token}`,
-        `Verify email: ${token}`
-      );
+      const token = await generateToken({ userId: _user.id });
+      await mail.sendgrid.send({
+        to: _user.email,
+        subject: "Verify Email",
+        text: `Verify email: ${token}`,
+        html: `Verify email: ${token}`,
+      });
       return { status: false, message: "Please verify your email" };
     }
 
     const data = _user.transform();
-    data.token = jwt.generate(_user.id);
+    data.token = jwt.generate({ userId: _user.id });
 
     return { status: true, message: "Login successful", data };
   } catch (error) {
@@ -157,13 +157,13 @@ export const resendVerificationAccount = async (
       return { status: false, message: "You are already verified" };
     }
 
-    const token = await generateToken(user.id);
-    await mail.sendgrid.send(
-      user.email,
-      "Verify Email",
-      `Verify email: ${token}`,
-      `Verify email: ${token}`
-    );
+    const token = await generateToken({ userId: user.id });
+    await mail.sendgrid.send({
+      to: user.email,
+      subject: "Verify Email",
+      text: `Verify email: ${token}`,
+      html: `Verify email: ${token}`,
+    });
     return { status: true, message: "Verification token resent" };
   } catch (error) {
     return { status: false, message: "Error trying to login" };
@@ -188,14 +188,14 @@ export const initiateReset = async (
       return { status: true, message: "Check your email" };
     }
 
-    const token = await generateToken(user.id, "reset");
+    const token = await generateToken({ userId: user.id, tokenType: "reset" });
 
-    await mail.sendgrid.send(
-      user.email,
-      "Reset Password",
-      `Reset Password with ${token}`,
-      `Reset Password with ${token}`
-    );
+    await mail.sendgrid.send({
+      to: user.email,
+      subject: "Reset Password",
+      text: `Reset Password with ${token}`,
+      html: `Reset Password with ${token}`,
+    });
 
     return { status: true, message: "Check your email" };
   } catch (error) {
@@ -234,7 +234,7 @@ export const verifyReset = async (
       return { status: false, message: "An error occured" };
     }
 
-    const data = await generateToken(user.id, "update");
+    const data = await generateToken({ userId: user.id, tokenType: "update" });
 
     return { status: true, message: "Valid token", data };
   } catch (error) {
@@ -283,18 +283,24 @@ export const resetPassword = async (
   }
 };
 
-const generateToken = async (
-  userId: string,
-  tokenType: string = "verify",
-  medium: string = "email",
-  expiresMins: number = 5
-) => {
+const generateToken = async ({
+  userId,
+  tokenType = "verify",
+  medium = "any",
+  expiresMins = 5,
+  charset = "alphanumeric",
+  length = 5,
+}) => {
   await Token.update(
     { active: false },
     { where: { UserId: userId, tokenType, active: true } }
   );
 
-  const token = nanoid(10);
+  const token = randomstring.generate({
+    charset,
+    length,
+    capitalization: "uppercase",
+  });
 
   await Token.create({
     id: uuid(),
